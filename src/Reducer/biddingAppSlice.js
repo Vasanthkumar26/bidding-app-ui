@@ -17,9 +17,13 @@ export const biddingAppSlice = createSlice({
     updateSeletedItemDetails: (state, action) => {
       state.selectedItem = action.payload
     },
+    resetDetails: (state, action) => {
+      state.userDetails = {};
+      state.selectedItem = {}
+    }
   },
 });
 
-export const { updateUserDetails, getAllItemDetails, updateSeletedItemDetails } = biddingAppSlice.actions;
+export const { updateUserDetails, getAllItemDetails, updateSeletedItemDetails, resetDetails } = biddingAppSlice.actions;
 
 export default biddingAppSlice.reducer;

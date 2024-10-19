@@ -18,6 +18,10 @@ function InputFormController(props) {
         type={props.register === "password" ? "password" : "text"}
         ref={props.methods.register(props.register, {
           required: props.errorMessage,
+          pattern: props.register === "emailId" ? {
+            value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/,
+            message: 'Enter a valid email address'
+          } : undefined
         })}
         onChange={(e) =>
           props.methods.setValue(props.register, e?.target?.value?.trim(), {

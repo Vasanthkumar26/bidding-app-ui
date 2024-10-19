@@ -1,5 +1,10 @@
-import React from "react";
-import { Avatar, Button, Grid2 } from "@mui/material";
+import React, { useState } from "react";
+import {
+  Avatar,
+  Menu,
+  MenuItem,
+  Typography,
+} from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import ContentComponent from "../ContentComponent/ContentComponent";
 import { useDispatch, useSelector } from "react-redux";
@@ -8,15 +13,18 @@ import GenixHeaderIcon from "../../assets/Icons/GenixHeaderIcon.png";
 import ButtonComponent from "../ContentComponent/ButtonComponent";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import TranslateIcon from "@mui/icons-material/Translate";
-import zIndex from "@mui/material/styles/zIndex";
 import ItemDetailsComponent from "../ItemDetailsComponent/ItemDetailsComponent";
-import { updateSeletedItemDetails } from "../../Reducer/biddingAppSlice";
+import { resetDetails, updateSeletedItemDetails } from "../../Reducer/biddingAppSlice";
+import { PROFILE_OPTIONS } from "../../assets/constants/constants";
 
 function HeaderComponent() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  const [anchorEl, setAnchorEl] = useState(null);
   const userDetails = useSelector((state) => state.biddingApp.userDetails);
   const selectedItem = useSelector((state) => state.biddingApp.selectedItem);
+
   const getStartedClickHander = () => {
     navigate("/sign-up");
   };
@@ -33,8 +41,26 @@ function HeaderComponent() {
   };
 
   const genixIconClickHandler = () => {
-    dispatch(updateSeletedItemDetails({}))
-  }
+    dispatch(updateSeletedItemDetails({}));
+    navigate("/");
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const handleOpen = (e) => {
+    setAnchorEl(e.currentTarget);
+  };
+
+  const handleMenuClick = (option) => {
+    if(option === "Log out") {
+      dispatch(resetDetails())
+      return;
+    }
+    console.log(option)
+  };
+
   return (
     <>
       <Grid
@@ -52,7 +78,11 @@ function HeaderComponent() {
       >
         {/* <div>Genix Auctions</div> */}
         <Grid item size={5}>
-          <img src={GenixHeaderIcon} alt="genix-header-icon" onClick={genixIconClickHandler}/>
+          <img
+            src={GenixHeaderIcon}
+            alt="genix-header-icon"
+            onClick={genixIconClickHandler}
+          />
         </Grid>
         <Grid
           justifyContent="space-between"
@@ -78,7 +108,43 @@ function HeaderComponent() {
             English
           </ButtonComponent>
           {userDetails?.emailId ? (
-            <Avatar {...stringAvatar(userDetails)}></Avatar>
+            <div>
+              <Avatar {...stringAvatar(userDetails)} onClick={handleOpen} />
+              <Menu
+                anchorEl={anchorEl}
+                open={Boolean(anchorEl)}
+                onClose={handleClose}
+              >
+                <MenuItem>
+                  <Grid display="flex" spacing={1} alignItems="center">
+                    <Grid>
+                      <Avatar
+                        {...stringAvatar(userDetails)}
+                        onClick={handleOpen}
+                      />
+                    </Grid>
+                    <Grid>
+                      <Typography variant="subtitle2">
+                        {userDetails?.firstName} {userDetails?.lastName}
+                      </Typography>
+                      <Typography variant="caption">
+                        {userDetails?.emailId}
+                      </Typography>
+                    </Grid>
+                  </Grid>
+                </MenuItem>
+                {PROFILE_OPTIONS.map((option) => (
+                  <MenuItem
+                    id={option}
+                    onClick={() => {
+                      handleMenuClick(option);
+                    }}
+                  >
+                    {option}
+                  </MenuItem>
+                ))}
+              </Menu>
+            </div>
           ) : (
             <>
               <ButtonComponent onClick={loginClickHandler}>
@@ -95,7 +161,11 @@ function HeaderComponent() {
         </Grid>
       </Grid>
       <Grid sx={{ padding: "0rem 3rem" }}>
-        {Object.keys(selectedItem).length !== 0 && userDetails?.emailId ? <ItemDetailsComponent /> : <ContentComponent />}
+        {Object.keys(selectedItem).length !== 0 && userDetails?.emailId ? (
+          <ItemDetailsComponent />
+        ) : (
+          <ContentComponent />
+        )}
       </Grid>
     </>
   );
