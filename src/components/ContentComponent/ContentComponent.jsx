@@ -1,6 +1,5 @@
 import React from "react";
 import { bidList } from "../../data/data";
-import Card from "../../ReusableComponents/CardComponent/Card";
 import {
   FormControl,
   InputLabel,
@@ -13,6 +12,7 @@ import { useSelector } from "react-redux";
 import BidDialogComponent from "../BidDialogComponent/BidDialogComponent";
 import FooterComponent from "../FooterComponent/FooterComponent";
 import ExploreAuctionsIcon from "../../assets/Icons/ExploreAuctions.png";
+import Card from "../CardComponent/Card";
 
 function ContentComponent() {
   const userDetails = useSelector((state) => state.biddingApp.userDetails);

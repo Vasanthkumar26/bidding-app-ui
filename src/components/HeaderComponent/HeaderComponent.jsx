@@ -1,6 +1,5 @@
 import React from "react";
 import { bidList } from "../../data/data";
-import Card from "../../ReusableComponents/CardComponent/Card";
 import { Avatar, Button, Grid2 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import ContentComponent from "../ContentComponent/ContentComponent";

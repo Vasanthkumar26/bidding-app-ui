@@ -108,7 +108,7 @@ const SignUpComponent = () => {
 
           <Divider sx={{ my: 2 }}>or sign up with</Divider>
 
-          <Grid container spacing={2}>
+          <Grid container spacing={1}>
             <Grid item xs={4}>
               <ButtonComponent
                 startIcon={<GoogleIcon />}

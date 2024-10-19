@@ -12,6 +12,7 @@ function ButtonComponent(props) {
       color={props.color}
       disabled={props.disabled ?? false}
       onClick={props.onClick}
+      sx={{ backgroundColor: props.backgroundColor }}
     >
       {props?.children}
     </Button>
