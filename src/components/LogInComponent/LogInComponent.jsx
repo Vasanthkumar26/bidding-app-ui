@@ -7,7 +7,7 @@ import {
   Link,
   Typography,
 } from "@mui/material";
-import React from "react";
+import React, { useState } from "react";
 import InputFormController from "../ContentComponent/InputFormController";
 import { useForm } from "react-hook-form";
 import ButtonComponent from "../ContentComponent/ButtonComponent";
@@ -16,11 +16,38 @@ import AppleIcon from "@mui/icons-material/Apple";
 import FacebookIcon from "@mui/icons-material/Facebook";
 import LogInImage from "../../assets/Icons/LogInImage.png";
 import Grid from "@mui/material/Grid2";
+import axios from "axios";
+import { useDispatch } from "react-redux";
+import { updateUserDetails } from "../../Reducer/biddingAppSlice";
+import { useNavigate } from "react-router-dom";
 
 function LogInComponent() {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const methods = useForm();
+
+  const [showError, setShowError] = useState(false);
   const onSubmit = (data) => {
-    console.log(data);
+    const payload = { emailId: data?.emailId, password: data?.password };
+    axios
+      .request({
+        method: "put",
+        maxBodyLength: Infinity,
+        url: "http://localhost:5555/users/checkValidUser",
+        headers: {
+          "Content-Type": "application/json",
+          "Accept": "application/json",
+        },
+        data: JSON.stringify(payload),
+      })
+      .then((response) => {
+        if("message" in response?.data) {
+          setShowError(true)
+          return
+        }
+        dispatch(updateUserDetails(response.data[0]))
+        navigate("/")
+      });
   };
   const onError = (data) => {
     console.log(data);
@@ -41,10 +68,10 @@ function LogInComponent() {
           <form onSubmit={methods.handleSubmit(onSubmit, onError)}>
             <InputFormController
               label="Email Address"
-              register="email"
+              register="emailId"
               methods={methods}
               errorMessage="Email is Required"
-              error={methods.formState.errors?.email}
+              error={methods.formState.errors?.emailId}
             />
             <InputFormController
               label="Password"
@@ -77,6 +104,7 @@ function LogInComponent() {
             >
               Continue
             </Button>
+            {showError && <Typography color="red">Please enter correct mail id & password</Typography>}
           </form>
 
           <Divider sx={{ my: 2 }}>or sign up with</Divider>
@@ -112,7 +140,7 @@ function LogInComponent() {
           </Grid>
 
           <Typography variant="body2" align="center" sx={{ mt: 2 }}>
-            Don't have an Account? <Link href="#">Sign up here</Link>
+            Don't have an Account? <Link href="/sign-up">Sign up here</Link>
           </Typography>
         </Box>
       </Grid>

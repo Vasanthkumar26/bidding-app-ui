@@ -20,7 +20,7 @@ function InputFormController(props) {
           required: props.errorMessage,
         })}
         onChange={(e) =>
-          props.methods.setValue(props.register, e?.target?.value, {
+          props.methods.setValue(props.register, e?.target?.value?.trim(), {
             shouldValidate: true,
           })
         }

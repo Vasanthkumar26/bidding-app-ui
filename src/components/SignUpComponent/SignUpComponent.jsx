@@ -17,20 +17,42 @@ import SignUpImage from "../../assets/Icons/SignUpImage.png";
 import ButtonComponent from "../ContentComponent/ButtonComponent";
 import InputFormController from "../ContentComponent/InputFormController";
 import { useForm } from "react-hook-form";
+import axios from "axios";
+import { useDispatch } from "react-redux";
+import { updateUserDetails } from "../../Reducer/biddingAppSlice";
+import { useNavigate } from "react-router-dom";
 
 const SignUpComponent = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const methods = useForm({
     defaultValues: {
       firstName: "",
       lastName: "",
-      email: "",
+      emailId: "",
       password: "",
       receiveEmails: false,
     },
   });
 
   const onSubmit = (data) => {
-    console.log(data);
+    axios
+      .request({
+        method: "post",
+        maxBodyLength: Infinity,
+        url: "http://localhost:5555/users",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        data: JSON.stringify(data),
+      })
+      .then((response) => {
+        dispatch(updateUserDetails(response.data))
+        navigate("/")
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
   const onError = (data) => {
@@ -68,10 +90,10 @@ const SignUpComponent = () => {
             />
             <InputFormController
               label="Email Address"
-              register="email"
+              register="emailId"
               methods={methods}
               errorMessage="Email is Required"
-              error={methods.formState.errors?.email}
+              error={methods.formState.errors?.emailId}
             />
             <InputFormController
               label="Password"

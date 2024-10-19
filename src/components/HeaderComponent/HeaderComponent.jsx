@@ -1,18 +1,22 @@
 import React from "react";
-import { bidList } from "../../data/data";
 import { Avatar, Button, Grid2 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import ContentComponent from "../ContentComponent/ContentComponent";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Grid from "@mui/material/Grid2";
 import GenixHeaderIcon from "../../assets/Icons/GenixHeaderIcon.png";
 import ButtonComponent from "../ContentComponent/ButtonComponent";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import TranslateIcon from "@mui/icons-material/Translate";
+import zIndex from "@mui/material/styles/zIndex";
+import ItemDetailsComponent from "../ItemDetailsComponent/ItemDetailsComponent";
+import { updateSeletedItemDetails } from "../../Reducer/biddingAppSlice";
 
 function HeaderComponent() {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const userDetails = useSelector((state) => state.biddingApp.userDetails);
+  const selectedItem = useSelector((state) => state.biddingApp.selectedItem);
   const getStartedClickHander = () => {
     navigate("/sign-up");
   };
@@ -21,13 +25,16 @@ function HeaderComponent() {
     navigate("/log-in");
   };
 
-  const stringAvatar = (name) => {
+  const stringAvatar = (userDetail) => {
     return {
       sx: { width: 32, height: 32 },
-      children: `${name.split(" ")[0][0]}${name.split(" ")[1][0]}`,
+      children: `${userDetail.firstName[0]}${userDetail.lastName[0]}`,
     };
   };
 
+  const genixIconClickHandler = () => {
+    dispatch(updateSeletedItemDetails({}))
+  }
   return (
     <>
       <Grid
@@ -40,11 +47,12 @@ function HeaderComponent() {
           position: "sticky",
           top: "0",
           backgroundColor: "#FEE4F8",
+          zIndex: 1,
         }}
       >
         {/* <div>Genix Auctions</div> */}
         <Grid item size={5}>
-          <img src={GenixHeaderIcon} alt="genix-header-icon" />
+          <img src={GenixHeaderIcon} alt="genix-header-icon" onClick={genixIconClickHandler}/>
         </Grid>
         <Grid
           justifyContent="space-between"
@@ -70,7 +78,7 @@ function HeaderComponent() {
             English
           </ButtonComponent>
           {userDetails?.emailId ? (
-            <Avatar {...stringAvatar("Vasanthkumar Sadasivam")}></Avatar>
+            <Avatar {...stringAvatar(userDetails)}></Avatar>
           ) : (
             <>
               <ButtonComponent onClick={loginClickHandler}>
@@ -87,7 +95,7 @@ function HeaderComponent() {
         </Grid>
       </Grid>
       <Grid sx={{ padding: "0rem 3rem" }}>
-        <ContentComponent />
+        {Object.keys(selectedItem).length !== 0 && userDetails?.emailId ? <ItemDetailsComponent /> : <ContentComponent />}
       </Grid>
     </>
   );

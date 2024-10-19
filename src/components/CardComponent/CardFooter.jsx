@@ -1,16 +1,18 @@
 import { Button, Typography } from "@mui/material";
 import React from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import ButtonComponent from "../ContentComponent/ButtonComponent";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
+import { updateSeletedItemDetails } from "../../Reducer/biddingAppSlice";
 
 function CardFooter(props) {
+  const dispatch = useDispatch()
   const navigate = useNavigate();
   const userDetails = useSelector((state) => state.biddingApp.userDetails);
   const bidNowClickHandler = () => {
     if (userDetails?.emailId) {
-      console.log(userDetails);
+      dispatch(updateSeletedItemDetails(props.item))
     } else {
       navigate("/log-in");
     }

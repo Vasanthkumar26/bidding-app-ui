@@ -1,16 +1,25 @@
-import { createSlice } from '@reduxjs/toolkit'
+import { createSlice } from "@reduxjs/toolkit";
 
 export const biddingAppSlice = createSlice({
-  name: 'biddingApp',
+  name: "biddingApp",
   initialState: {
     userDetails: {},
     items: [],
     selectedItem: {},
   },
   reducers: {
+    updateUserDetails: (state, action) => {
+      state.userDetails = action.payload;
+    },
+    getAllItemDetails: (state, action) => {
+      state.items = action.payload;
+    },
+    updateSeletedItemDetails: (state, action) => {
+      state.selectedItem = action.payload
+    },
   },
-})
+});
 
-export const {  } = biddingAppSlice.actions
+export const { updateUserDetails, getAllItemDetails, updateSeletedItemDetails } = biddingAppSlice.actions;
 
-export default biddingAppSlice.reducer
+export default biddingAppSlice.reducer;

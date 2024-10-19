@@ -1,5 +1,4 @@
-import React from "react";
-import { bidList } from "../../data/data";
+import React, { useEffect } from "react";
 import {
   FormControl,
   InputLabel,
@@ -8,20 +7,39 @@ import {
   Typography,
 } from "@mui/material";
 import Grid from "@mui/material/Grid2";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import BidDialogComponent from "../BidDialogComponent/BidDialogComponent";
 import FooterComponent from "../FooterComponent/FooterComponent";
 import ExploreAuctionsIcon from "../../assets/Icons/ExploreAuctions.png";
 import Card from "../CardComponent/Card";
+import axios from "axios";
+import { getAllItemDetails } from "../../Reducer/biddingAppSlice";
 
 function ContentComponent() {
+  const dispatch = useDispatch();
+  const overAllItemsList = useSelector((state) => state.biddingApp.items);
+  useEffect(() => {
+    axios
+      .request({
+        method: "get",
+        maxBodyLength: Infinity,
+        url: "http://localhost:5555/items",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+      .then((res) => {
+        dispatch(getAllItemDetails(res.data.data));
+      });
+  }, []);
+
   const userDetails = useSelector((state) => state.biddingApp.userDetails);
   return (
     <div>
       <Grid>
         {userDetails?.emailId ? (
           <Grid
-            sx={{ padding: "2rem 0rem" }}
+            sx={{ padding: "1rem 0rem" }}
             display="flex"
             justifyContent="space-between"
             alignItems="center"
@@ -46,14 +64,22 @@ function ContentComponent() {
         ) : (
           <Grid display="flex">
             {/* <Typography>Explore Auctions</Typography> */}
-            <img alt='explore-acutions' src={ExploreAuctionsIcon} />
+            <img alt="explore-acutions" src={ExploreAuctionsIcon} />
           </Grid>
         )}
       </Grid>
       <BidDialogComponent />
-      {(bidList ?? []).map((item) => (
-        <Card item={item} />
-      ))}
+      <Grid
+        display="flex"
+        container
+        padding="4rem 0 4rem 0"
+        spacing={{ xs: 1, md: 2 }}
+        columns={{ xs: 4, sm: 8, md: 12 }}
+      >
+        {(overAllItemsList ?? []).map((item) => (
+          <Card item={item} />
+        ))}
+      </Grid>
       <FooterComponent />
     </div>
   );

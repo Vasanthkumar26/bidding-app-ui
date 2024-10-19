@@ -1,16 +1,22 @@
-import { CardHeader } from '@mui/material'
-import React from 'react'
-import CardContent from './CardContent';
-import CardFooter from './CardFooter';
+import { CardHeader } from "@mui/material";
+import React from "react";
+import CardContent from "./CardContent";
+import CardFooter from "./CardFooter";
+import Grid from "@mui/material/Grid2";
 
 function Card(props) {
   return (
-    <div style={{ maxWidth: "150px", padding: "5px", border: "1px solid black"}} >
-      <CardHeader item={props.item}/>
-      <CardContent item={props.item}/>
-      <CardFooter item={props.item}/>
-    </div>
-  )
+    <Grid
+      size={{ xs: 2, sm: 2.25, md: 2.25 }}
+      padding="5px"
+      borderRadius="4px"
+      boxShadow={2}
+    >
+      <CardHeader item={props.item} />
+      <CardContent item={props.item} />
+      <CardFooter item={props.item} />
+    </Grid>
+  );
 }
 
 export default React.memo(Card);
