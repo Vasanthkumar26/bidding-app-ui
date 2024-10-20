@@ -1,10 +1,5 @@
 import React, { useState } from "react";
-import {
-  Avatar,
-  Menu,
-  MenuItem,
-  Typography,
-} from "@mui/material";
+import { Avatar, Button, Menu, MenuItem, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import ContentComponent from "../ContentComponent/ContentComponent";
 import { useDispatch, useSelector } from "react-redux";
@@ -14,16 +9,26 @@ import ButtonComponent from "../ContentComponent/ButtonComponent";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import TranslateIcon from "@mui/icons-material/Translate";
 import ItemDetailsComponent from "../ItemDetailsComponent/ItemDetailsComponent";
-import { resetDetails, updateSeletedItemDetails } from "../../Reducer/biddingAppSlice";
+import {
+  resetDetails,
+  updateNewItemPopupState,
+  updateSeletedItemDetails,
+} from "../../Reducer/biddingAppSlice";
 import { PROFILE_OPTIONS } from "../../assets/constants/constants";
+import NewItemPopup from "../NewItemPopup/NewItemPopup";
 
 function HeaderComponent() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const [anchorEl, setAnchorEl] = useState(null);
+  const [anchorEl1, setAnchorEl1] = useState(null);
+
   const userDetails = useSelector((state) => state.biddingApp.userDetails);
   const selectedItem = useSelector((state) => state.biddingApp.selectedItem);
+  const displayNewItemPopup = useSelector(
+    (state) => state.biddingApp.openNewItemPopup
+  );
 
   const getStartedClickHander = () => {
     navigate("/sign-up");
@@ -49,18 +54,37 @@ function HeaderComponent() {
     setAnchorEl(null);
   };
 
+  const handleClose1 = () => {
+    setAnchorEl1(null);
+  };
+
   const handleOpen = (e) => {
     setAnchorEl(e.currentTarget);
   };
 
-  const handleMenuClick = (option) => {
-    if(option === "Log out") {
-      dispatch(resetDetails())
-      return;
-    }
-    console.log(option)
+  const handleOpen1 = (e) => {
+    setAnchorEl1(e.currentTarget);
   };
 
+  const handleMenuClick = (option) => {
+    if (option === "Log out") {
+      dispatch(resetDetails());
+    }
+  };
+
+  const addItemClickHandler = () => {
+    if (userDetails?.emailId) {
+      dispatch(
+        updateNewItemPopupState({
+          openPopup: true,
+          isEditing: false,
+        })
+      );
+      setAnchorEl1(null);
+      return;
+    }
+    navigate("/log-in");
+  };
   return (
     <>
       <Grid
@@ -90,23 +114,44 @@ function HeaderComponent() {
           justifyItems="flex-end"
           item
           size={7}
+          container
         >
-          <ButtonComponent endIcon={<ExpandMoreIcon />} color="black">
-            Auctions
-          </ButtonComponent>
-          <ButtonComponent endIcon={<ExpandMoreIcon />} color="black">
-            Banking
-          </ButtonComponent>
-          <ButtonComponent endIcon={<ExpandMoreIcon />} color="black">
-            About us
-          </ButtonComponent>
-          <ButtonComponent
-            startIcon={<TranslateIcon />}
-            endIcon={<ExpandMoreIcon />}
-            color="black"
-          >
-            English
-          </ButtonComponent>
+          <Grid>
+            <Button
+              endIcon={<ExpandMoreIcon />}
+              color="black"
+              onClick={handleOpen1}
+              style={{ textTransform: "none" }}
+            >
+              Auctions
+            </Button>
+            <Menu
+              anchorEl={anchorEl1}
+              open={Boolean(anchorEl1)}
+              onClose={handleClose1}
+            >
+              <MenuItem onClick={addItemClickHandler}>Add Item</MenuItem>
+            </Menu>
+          </Grid>
+          <Grid>
+            <ButtonComponent endIcon={<ExpandMoreIcon />} color="black">
+              Banking
+            </ButtonComponent>
+          </Grid>
+          <Grid>
+            <ButtonComponent endIcon={<ExpandMoreIcon />} color="black">
+              About us
+            </ButtonComponent>
+          </Grid>
+          <Grid>
+            <ButtonComponent
+              startIcon={<TranslateIcon />}
+              endIcon={<ExpandMoreIcon />}
+              color="black"
+            >
+              English
+            </ButtonComponent>
+          </Grid>
           {userDetails?.emailId ? (
             <div>
               <Avatar {...stringAvatar(userDetails)} onClick={handleOpen} />
@@ -167,6 +212,7 @@ function HeaderComponent() {
           <ContentComponent />
         )}
       </Grid>
+      {displayNewItemPopup && <NewItemPopup />}
     </>
   );
 }

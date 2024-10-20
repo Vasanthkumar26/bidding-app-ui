@@ -1,7 +1,6 @@
 import Grid from "@mui/material/Grid2";
 import React from "react";
 import BidDetailsComponent from "./BidDetailsComponent";
-import DescriptionComponent from "./DescriptionComponent";
 import { useDispatch, useSelector } from "react-redux";
 import { Checkbox, Typography } from "@mui/material";
 import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft";
@@ -9,6 +8,7 @@ import ButtonComponent from "../ContentComponent/ButtonComponent";
 import { useNavigate } from "react-router-dom";
 import {
   updateBidPopupState,
+  updateNewItemPopupState,
   updateSeletedItemDetails,
 } from "../../Reducer/biddingAppSlice";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
@@ -26,6 +26,7 @@ function ItemDetailsComponent() {
 
   const itemDetails = useSelector((state) => state.biddingApp.selectedItem);
   const openBidPopup = useSelector((state) => state.biddingApp.openBidPopup);
+  const userDetails = useSelector((state) => state.biddingApp.userDetails);
 
   const backToCatalogClickHandler = () => {
     dispatch(updateSeletedItemDetails({}));
@@ -36,18 +37,32 @@ function ItemDetailsComponent() {
     dispatch(updateBidPopupState(true));
   };
 
-  const deleteItemClickHandler = () => {
-    let config = {
-      method: "delete",
-      maxBodyLength: Infinity,
-      url: `http://localhost:5555/items/${itemDetails?._id}`,
-      headers: {
-        "Content-Type": "application/json",
-      },
-    };
-    axios.request(config).then((response) => {
-      navigate("/")
-    });
+  const deleteItemClickHandler = async () => {
+    try {
+      let config = {
+        method: "delete",
+        maxBodyLength: Infinity,
+        url: `http://localhost:5555/items/${itemDetails?._id}`,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      };
+      const res = await axios.request(config);
+      if (res?.data?.message === "Item deleted successfully") {
+        navigate("/");
+      }
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+
+  const editItemClickHandler = () => {
+    dispatch(
+      updateNewItemPopupState({
+        openPopup: true,
+        isEditing: true,
+      })
+    );
   };
 
   return (
@@ -75,10 +90,17 @@ function ItemDetailsComponent() {
             <CardContent item={itemDetails} />
           </Grid>
           <Grid size={12} display="flex">
-            <ButtonComponent startIcon={<EditIcon />}>Edit</ButtonComponent>
+            <ButtonComponent
+              startIcon={<EditIcon />}
+              onClick={editItemClickHandler}
+              disabled={itemDetails?.createdBy !== userDetails?.emailId}
+            >
+              Edit
+            </ButtonComponent>
             <ButtonComponent
               startIcon={<DeleteIcon />}
               onClick={deleteItemClickHandler}
+              disabled={itemDetails?.createdBy !== userDetails?.emailId}
             >
               Delete
             </ButtonComponent>

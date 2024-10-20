@@ -80,7 +80,6 @@ function LogInComponent() {
               errorMessage="Password is Required"
               error={methods.formState.errors?.password}
             />
-            {console.log(methods)}
             <FormControlLabel
               control={
                 <Checkbox

@@ -1,8 +1,29 @@
 import { Typography } from "@mui/material";
 import Grid from "@mui/material/Grid2";
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 function CardContent(props) {
+  const [timeDiff, setTimeDiff] = useState("");
+
+  const getDiff = () => {
+    const currentTime = new Date();
+    const endsAt = new Date(props.item.endsAt);
+    const diffInMs = endsAt - currentTime;
+    const diffInHours = Math.floor(diffInMs / (1000 * 60 * 60));
+    const diffInMinutes = Math.floor(
+      (diffInMs % (1000 * 60 * 60)) / (1000 * 60)
+    );
+    setTimeDiff(`${diffInHours} Hours ${diffInMinutes} Minutes`);
+  }
+
+  useEffect(() => {
+    getDiff()
+  }, [])
+
+  setTimeout(() => {
+    getDiff()
+  }, 60000);
+
   return (
     <Grid container spacing={2}>
       <Grid display="flex" size={12}>
@@ -28,10 +49,12 @@ function CardContent(props) {
         </Grid>
         <Grid display="flex" justifyContent="space-between" alignItems="center">
           <Typography variant="body2">Current Bid</Typography>
-          <Typography>$ {props.item.currentBid ?? props.item.minimumBid}</Typography>
+          <Typography>
+            $ {props.item.currentBid ?? props.item.minimumBid}
+          </Typography>
         </Grid>
         <Grid display="flex" justifyContent="space-between" alignItems="center">
-          <Typography variant="body2">Ends in </Typography>
+          <Typography variant="body2">Ends in {timeDiff}</Typography>
         </Grid>
       </Grid>
     </Grid>
