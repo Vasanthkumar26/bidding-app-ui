@@ -192,15 +192,19 @@ function HeaderComponent() {
             </div>
           ) : (
             <>
-              <ButtonComponent onClick={loginClickHandler}>
-                Log in
-              </ButtonComponent>
-              <ButtonComponent
-                onClick={getStartedClickHander}
-                variant="contained"
-              >
-                Get Started
-              </ButtonComponent>
+              <Grid>
+                <ButtonComponent onClick={loginClickHandler}>
+                  Log in
+                </ButtonComponent>
+              </Grid>
+              <Grid>
+                <ButtonComponent
+                  onClick={getStartedClickHander}
+                  variant="contained"
+                >
+                  Get Started
+                </ButtonComponent>
+              </Grid>
             </>
           )}
         </Grid>

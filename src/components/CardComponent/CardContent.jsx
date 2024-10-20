@@ -1,27 +1,17 @@
 import { Typography } from "@mui/material";
 import Grid from "@mui/material/Grid2";
 import React, { useEffect, useState } from "react";
+import { getDiff } from "../../utilities/utilFunctions";
 
 function CardContent(props) {
   const [timeDiff, setTimeDiff] = useState("");
 
-  const getDiff = () => {
-    const currentTime = new Date();
-    const endsAt = new Date(props.item.endsAt);
-    const diffInMs = endsAt - currentTime;
-    const diffInHours = Math.floor(diffInMs / (1000 * 60 * 60));
-    const diffInMinutes = Math.floor(
-      (diffInMs % (1000 * 60 * 60)) / (1000 * 60)
-    );
-    setTimeDiff(`${diffInHours} Hours ${diffInMinutes} Minutes`);
-  }
-
   useEffect(() => {
-    getDiff()
+    setTimeDiff(getDiff(props.item.endsAt));
   }, [])
 
   setTimeout(() => {
-    getDiff()
+    setTimeDiff(getDiff(props.item.endsAt));
   }, 60000);
 
   return (
