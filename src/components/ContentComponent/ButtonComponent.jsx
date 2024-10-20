@@ -13,6 +13,7 @@ function ButtonComponent(props) {
       disabled={props.disabled ?? false}
       onClick={props.onClick}
       sx={{ backgroundColor: props.backgroundColor }}
+      type={props.type ?? "text"}
     >
       {props?.children}
     </Button>
