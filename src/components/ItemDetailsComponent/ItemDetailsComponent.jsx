@@ -114,6 +114,7 @@ function ItemDetailsComponent() {
         </Typography>
       </Grid>
       <Grid size={2}>
+        <BidDetailsComponent />
         <ButtonComponent
           endIcon={<KeyboardArrowRightIcon />}
           variant="contained"

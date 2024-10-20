@@ -9,7 +9,7 @@ import { Favorite, FavoriteBorder } from "@mui/icons-material";
 function Card(props) {
   return (
     <Grid
-      size={{ xs: 2, sm: 2.25, md: 2.25 }}
+      size={{ xs: 2, sm: 2.4, md: 2.4 }}
       padding="5px"
       borderRadius="4px"
       boxShadow={2}
