@@ -1,5 +1,5 @@
 import Grid from "@mui/material/Grid2";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import BidDetailsComponent from "./BidDetailsComponent";
 import { useDispatch, useSelector } from "react-redux";
 import { Checkbox, Typography } from "@mui/material";
@@ -24,9 +24,28 @@ function ItemDetailsComponent() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
+  const [disableBidNow, setDisableBidNow] = useState(false);
+
   const itemDetails = useSelector((state) => state.biddingApp.selectedItem);
   const openBidPopup = useSelector((state) => state.biddingApp.openBidPopup);
   const userDetails = useSelector((state) => state.biddingApp.userDetails);
+
+  const checkBidNowDisplay = () => {
+    const currentTime = new Date();
+    const createdAt = new Date(itemDetails?.endsAt);
+    const diffInMs = createdAt - currentTime;
+    return diffInMs > 0 ? true : false;
+  };
+
+  useEffect(() => {
+    checkBidNowDisplay(checkBidNowDisplay());
+  }, []);
+
+  setTimeout(() => {
+    if (!disableBidNow) {
+      setDisableBidNow(checkBidNowDisplay());
+    }
+  }, 60000);
 
   const backToCatalogClickHandler = () => {
     dispatch(updateSeletedItemDetails({}));
@@ -49,7 +68,7 @@ function ItemDetailsComponent() {
       };
       const res = await axios.request(config);
       if (res?.data?.message === "Item deleted successfully") {
-        navigate("/");
+        backToCatalogClickHandler();
       }
     } catch (error) {
       console.log(error.message);
@@ -119,6 +138,7 @@ function ItemDetailsComponent() {
           endIcon={<KeyboardArrowRightIcon />}
           variant="contained"
           onClick={bidNowClickHandler}
+          disabled={disableBidNow}
         >
           Bid now
         </ButtonComponent>

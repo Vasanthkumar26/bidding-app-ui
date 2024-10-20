@@ -12,14 +12,19 @@ import CloseIcon from "@mui/icons-material/Close";
 import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
-import { updateNewItemPopupState, updateSeletedItemDetails } from "../../Reducer/biddingAppSlice";
+import {
+  updateNewItemPopupState,
+  updateSeletedItemDetails,
+} from "../../Reducer/biddingAppSlice";
 import InputFormController from "../ContentComponent/InputFormController";
 import axios from "axios";
 
 function NewItemPopup() {
   const dispatch = useDispatch();
   const userDetails = useSelector((state) => state.biddingApp.userDetails);
-  const isEditing = useSelector((state) => state.biddingApp.isEditingInNewPopup);
+  const isEditing = useSelector(
+    (state) => state.biddingApp.isEditingInNewPopup
+  );
   const itemDetails = useSelector((state) => state.biddingApp.selectedItem);
 
   useEffect(() => {
@@ -60,15 +65,10 @@ function NewItemPopup() {
         },
         data: data,
       };
-      axios
-        .request(config)
-        .then((response) => {
-          dispatch(updateSeletedItemDetails(response.data))
-          handleCloseClick()
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+      axios.request(config).then((response) => {
+        dispatch(updateSeletedItemDetails(response.data));
+        handleCloseClick();
+      });
     } else {
       const payload = {
         ...data,
@@ -85,7 +85,8 @@ function NewItemPopup() {
         data: payload,
       };
       axios.request(config).then((response) => {
-        console.log(response.data);
+        dispatch(updateSeletedItemDetails(response.data));
+        handleCloseClick();
       });
     }
   };
@@ -125,6 +126,7 @@ function NewItemPopup() {
             errorMessage="Starting bid is Required"
             error={methods.formState.errors?.minimumBid}
             type="number"
+            disabled={isEditing}
           />
           <FormControlLabel
             control={
