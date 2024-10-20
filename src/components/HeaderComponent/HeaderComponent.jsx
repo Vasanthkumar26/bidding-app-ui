@@ -217,4 +217,4 @@ function HeaderComponent() {
   );
 }
 
-export default HeaderComponent;
+export default React.memo(HeaderComponent);
