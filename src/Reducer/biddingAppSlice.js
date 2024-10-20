@@ -6,6 +6,7 @@ export const biddingAppSlice = createSlice({
     userDetails: {},
     items: [],
     selectedItem: {},
+    openBidPopup: false
   },
   reducers: {
     updateUserDetails: (state, action) => {
@@ -20,10 +21,13 @@ export const biddingAppSlice = createSlice({
     resetDetails: (state, action) => {
       state.userDetails = {};
       state.selectedItem = {}
+    },
+    updateBidPopupState: (state, action) => {
+      state.openBidPopup = action.payload
     }
   },
 });
 
-export const { updateUserDetails, getAllItemDetails, updateSeletedItemDetails, resetDetails } = biddingAppSlice.actions;
+export const { updateUserDetails, getAllItemDetails, updateSeletedItemDetails, resetDetails, updateBidPopupState } = biddingAppSlice.actions;
 
 export default biddingAppSlice.reducer;

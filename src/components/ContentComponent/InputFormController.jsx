@@ -41,6 +41,7 @@ function InputFormController(props) {
           margin: 0,
         }}
         helperText={props.error ? props.errorMessage : ""}
+        defaultValue={props.methods.getValues(props.register)}
       />
     </FormControl>
   );

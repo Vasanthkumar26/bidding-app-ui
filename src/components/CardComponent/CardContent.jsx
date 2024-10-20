@@ -28,7 +28,7 @@ function CardContent(props) {
         </Grid>
         <Grid display="flex" justifyContent="space-between" alignItems="center">
           <Typography variant="body2">Current Bid</Typography>
-          <Typography>$ {props.item.currentBid}</Typography>
+          <Typography>$ {props.item.currentBid ?? props.item.minimumBid}</Typography>
         </Grid>
         <Grid display="flex" justifyContent="space-between" alignItems="center">
           <Typography variant="body2">Ends in </Typography>
