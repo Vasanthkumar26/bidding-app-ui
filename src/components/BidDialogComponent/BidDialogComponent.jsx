@@ -64,12 +64,9 @@ function BidDialogComponent(props) {
     };
     axios.request(config)
     .then((response) => {
-      dispatch(updateSeletedItemDetails(response.data))
+      dispatch(updateSeletedItemDetails(response.data));
+      handleCloseClick();
     })
-  };
-
-  const onError = (data) => {
-    console.log(data);
   };
 
   return (
@@ -79,7 +76,7 @@ function BidDialogComponent(props) {
       fullWidth
       onClose={handleCloseClick}
     >
-      <form onSubmit={methods.handleSubmit(onSubmit, onError)}>
+      <form onSubmit={methods.handleSubmit(onSubmit)}>
         <DialogTitle>
           Submit Bid | {itemDetails?.label}
           <IconButton

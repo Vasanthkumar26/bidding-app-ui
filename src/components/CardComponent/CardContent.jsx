@@ -8,7 +8,7 @@ function CardContent(props) {
 
   useEffect(() => {
     setTimeDiff(getDiff(props.item.endsAt));
-  }, [])
+  }, [props.item.endsAt])
 
   setTimeout(() => {
     setTimeDiff(getDiff(props.item.endsAt));
