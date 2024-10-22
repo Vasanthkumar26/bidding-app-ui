@@ -4,8 +4,8 @@ import React from "react";
 
 function CardContent(props) {
   return (
-    <>
-      <Grid display="flex">
+    <Grid container spacing={2}>
+      <Grid display="flex" size={12}>
         <Typography
           variant="caption"
           color="white"
@@ -18,21 +18,23 @@ function CardContent(props) {
           Live Auction
         </Typography>
       </Grid>
-      <Grid display="flex">
-        <Typography variant="subtitle2">{props.item.label}</Typography>
+      <Grid size={12}>
+        <Grid display="flex">
+          <Typography variant="subtitle2">{props.item.label}</Typography>
+        </Grid>
+        <Grid display="flex" justifyContent="space-between" alignItems="center">
+          <Typography variant="body2">Minimum Bid</Typography>
+          <Typography>$ {props.item.minimumBid}</Typography>
+        </Grid>
+        <Grid display="flex" justifyContent="space-between" alignItems="center">
+          <Typography variant="body2">Current Bid</Typography>
+          <Typography>$ {props.item.currentBid}</Typography>
+        </Grid>
+        <Grid display="flex" justifyContent="space-between" alignItems="center">
+          <Typography variant="body2">Ends in </Typography>
+        </Grid>
       </Grid>
-      <Grid display="flex" justifyContent="space-between">
-        <Typography variant="body2">Minimum Bid</Typography>
-        <Typography>$ {props.item.minimumBid}</Typography>
-      </Grid>
-      <Grid display="flex" justifyContent="space-between">
-        <Typography variant="body2">Current Bid</Typography>
-        <Typography>$ {props.item.currentBid}</Typography>
-      </Grid>
-      <Grid display="flex" justifyContent="space-between">
-        <Typography variant="body2">Ends in </Typography>
-      </Grid>
-    </>
+    </Grid>
   );
 }
 
